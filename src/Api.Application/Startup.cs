@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.CrossCutting.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace Application
 {
@@ -24,6 +26,24 @@ namespace Application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureService.ConfigureDependenciesService(services);
+            ConfigureRepository.ConfigureDependenciesRepository(services);//services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1",
+                new OpenApiInfo
+                {
+                    Title = "Curso de AspNetCore 2.2",
+                    Version = "v1",
+                    Description = "Exemplo de API REST criada com o ASP.NET Core",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Thiago Henrique de Oliveira"
+                    }
+                });
+            });
+
             services.AddControllers();
         }
 
@@ -34,6 +54,22 @@ namespace Application
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            //Ativa Swagger
+            app.UseSwaggerUI(c =>
+            {
+                c.RoutePrefix = string.Empty;
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curso de API com AspNetCore 2.2");
+            });
+
+            //NÃO ESTA VALIDO
+            //Redireciona o Link para o Swagger, quando acessar a rota principal
+            /*var option = new RewriteOptions();
+            option.AddRedirect("^$", "swagger");
+            app.UseRewriter(option); */
+
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 

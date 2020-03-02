@@ -1,0 +1,12 @@
+POST
+{
+"name": "Nome Teste",
+"email": "teste1@mail.com.br"
+}
+
+PUT
+{
+"id": ""
+"name": "Usuário Alterado",
+"email": "updateuser@mail.com.br"
+}
