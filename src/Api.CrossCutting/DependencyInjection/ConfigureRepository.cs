@@ -13,7 +13,8 @@ namespace Api.CrossCutting.DependencyInjection
             serviceCollection.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 
             serviceCollection.AddDbContext<MyContext>(
-                    options => options.UseMySql("Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=mudar@123")
+                    // options => options.UseMySql("Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=mudar@123")
+                    options => options.UseSqlServer("Server=.\\SQLEXPRESS;Database=dbAPI;User Id=sa;Pwd=mudar@123")
             );
         }
 

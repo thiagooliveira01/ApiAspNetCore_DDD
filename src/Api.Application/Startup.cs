@@ -34,9 +34,9 @@ namespace Application
                 c.SwaggerDoc("v1",
                 new OpenApiInfo
                 {
-                    Title = "Curso de AspNetCore 2.2",
+                    Title = "Curso de AspNetCore 3.1",
                     Version = "v1",
-                    Description = "Exemplo de API REST criada com o ASP.NET Core",
+                    Description = "API REST criada com o ASP.NET Core",
                     Contact = new OpenApiContact
                     {
                         Name = "Thiago Henrique de Oliveira"
@@ -60,7 +60,7 @@ namespace Application
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = string.Empty;
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curso de API com AspNetCore 2.2");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curso de API com AspNetCore 3.1");
             });
 
             //NÃO ESTA VALIDO
