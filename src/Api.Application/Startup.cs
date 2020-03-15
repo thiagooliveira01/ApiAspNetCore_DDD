@@ -11,6 +11,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Rewrite;
+using Api.CrossCutting.Mappings;
+using AutoMapper;
 
 namespace Application
 {
@@ -28,6 +31,16 @@ namespace Application
         {
             ConfigureService.ConfigureDependenciesService(services);
             ConfigureRepository.ConfigureDependenciesRepository(services);//services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new DtoToModelProfile());
+                cfg.AddProfile(new EntityToDtoProfile());
+                cfg.AddProfile(new ModelToEntityProfile());
+            });
+
+            IMapper mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
 
             var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);
@@ -70,7 +83,8 @@ namespace Application
                     Description = "API REST criada com o ASP.NET Core",
                     Contact = new OpenApiContact
                     {
-                        Name = "Thiago Henrique de Oliveira"
+                        Name = "Thiago Henrique de Oliveira",
+                        Url = new Uri("https://github.com/thiagooliveira01")
                     }
                 });
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
@@ -121,11 +135,9 @@ namespace Application
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curso de API com AspNetCore 3.1");
             });
 
-            //NÃO ESTA VALIDO
-            //Redireciona o Link para o Swagger, quando acessar a rota principal
-            /*var option = new RewriteOptions();
+            var option = new RewriteOptions();
             option.AddRedirect("^$", "swagger");
-            app.UseRewriter(option); */
+            app.UseRewriter(option);
 
             app.UseHttpsRedirection();
 
