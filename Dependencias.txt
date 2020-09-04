@@ -1,2 +1,3 @@
 dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 7.0.0
 teste git visual code
+inclusão na branch
